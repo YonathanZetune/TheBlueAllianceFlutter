@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:tba_application/team.dart';
 import 'package:tba_application/teamView.dart';
 import 'package:tba_application/Requests.dart';
+
 void main() {
   
   runApp(MaterialApp(
@@ -29,26 +30,56 @@ class TBAData extends StatefulWidget {
   TBAState createState() => TBAState();
 }
 
-class TBAState extends State<TBAData>{
+class TBAState extends State<TBAData> {
   
   HttpClient myhttp = new HttpClient();
-  List<dynamic> data;
-  List cellTitle;
-  List<Team> teamData;
-  Future getSWData() async {
+//List<Team> teamData;
 
-    myhttp.get('www.thebluealliance.com', 80, '/api/v3/status').then((HttpClientRequest request) {
-      request.headers.set("accept", "application/json");
-      request.headers.set("X-TBA-Auth-Key", "yQEov7UAGBKouLOxmatZFhTJUv7km660eKXAKgeJElVIp6iGtrsRrfk1JuvXxrMC");
-      return request.close();
-    }).then((HttpClientResponse response) {
-      response.transform(utf8.decoder).listen((contents) {
-       print(contents);
-      });
-    });
-    
-  }
-  // Future getSWData() async {
+    // runs an HTTP get request and returns an HTTPClientResponse
+    Future getSWData() async {
+        myhttp.get('www.thebluealliance.com', 80, '/api/v3/status').then((HttpClientRequest request) {
+            request.headers.set("accept", "application/json");
+            request.headers.set("X-TBA-Auth-Key", "yQEov7UAGBKouLOxmatZFhTJUv7km660eKXAKgeJElVIp6iGtrsRrfk1JuvXxrMC");
+            return request.close();
+        }).then((HttpClientResponse response) {
+            response.transform(utf8.decoder).listen((contents) {
+                // print(contents);
+            });
+        });
+    }
+  
+    @override
+    Widget build(BuildContext context) {
+        return Scaffold(
+            appBar: AppBar(
+                title: Text('First Screen'),
+            ),
+            body: Center(
+                child: RaisedButton(
+                    child: Text('Launch screen'),
+                    onPressed: () {
+                        // Navigate to the second screen using a named route
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  TeamViewData(),
+                            )
+                        );
+                    },
+                ),
+            ),
+        );
+    }
+
+  
+    // @override
+    void initState() {
+        super.initState();
+        this.getSWData();
+    }
+}
+
+// Future getSWData() async {
   
 
   //   myhttp.get('www.thebluealliance.com', 80, '/api/v3/status').then((HttpClientRequest request) {
@@ -79,36 +110,5 @@ class TBAState extends State<TBAData>{
   //   });
     
   // }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('First Screen'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Launch screen'),
-          onPressed: () {
-            // Navigate to the second screen using a named route
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>  TeamViewData(),
-                )
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  
-  // @override
-  void initState() {
-    super.initState();
-    this.getSWData();
-  
-  }
-}
 
 

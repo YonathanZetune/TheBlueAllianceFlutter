@@ -8,92 +8,69 @@ import 'package:tba_application/team.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:tba_application/main.dart';
 import 'package:tba_application/Requests.dart';
-// class TestClass extends Requests{
 
-
-// }
 class TeamViewData extends StatelessWidget {
 
-//List<Team> myTeams;
+    ListView makeListView(index, start) {
+        String teamsFromRequest = Requests.getTeamsJsonForRequest('/teams/0');
+        List<Team> myTeamsList = new List<Team>();
+        //print(teamsFromRequest);
+        //myTeamsList.map((i)=>Team.fromJson(i)).toList();
+        print('Teams' + teamsFromRequest.toString());
 
-ListView makeList(ind, start) {
-Requests myRequest = new Requests();
-myRequest.setPath('/teams/0');
+        return new ListView.builder(
+                itemCount: myTeamsList == null ? 0 : 500,
+                itemBuilder: (BuildContext context, index) {
+                    return new Container(
+                        child: Center(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                                Card(
+                                    child: Container(
+                                        padding: EdgeInsets.all(15.0),
+                                        child: Row(
+                                        children: <Widget>[
+                                            Text(myTeamsList[index+start].nickName,    
+                                                style: TextStyle(
+                                                    fontSize: 18.0, color: Colors.black87)), 
+                                        ],
+                                        )),
+                                ),
+                            ],
+                        ),
+                        ),
+                    );
+                },
+            );
+    }
 
-
-
-
-//TeamList myTeamsL = new TeamList.fromJson(myRequest.teamData);
-//         //teamData =  myTeamsL.teams;
-//        myData2 = myTeamsL.teams;
-myRequest.doResponse();
-List<Team> myTeamsList = myRequest.dealWithResponse();
-//myTeams = myTeamsList;
-// myRequest.teamData;
-//TeamList teamLists = myTeamsList.
-//var myTeamsList = TeamList.fromJson(myTeamsList2).teams;
-print('Teams' + myTeamsList.toString());
-
-  int extra = 0;
-  var numPages = 1;
-  //print('teamView:'+ myTeamsList[0].nickName);
-
-  return new ListView.builder(
-        itemCount: myTeamsList == null ? 0 : 500,
-        itemBuilder: (BuildContext context, ind) {
-          return new Container(
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Card(
-                    child: Container(
-                        padding: EdgeInsets.all(15.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text(myTeamsList[ind+start].nickName,    
-                                style: TextStyle(
-                                    fontSize: 18.0, color: Colors.black87)), 
-                          ],
-                        )),
-                  ),
-                ],
-              ),
+    @override
+    Widget build(BuildContext context) {
+        return MaterialApp(
+        home: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+                appBar: AppBar(
+                    bottom: TabBar(
+                    tabs: [
+                        Tab(icon: Icon(Icons.youtube_searched_for)),
+                        Tab(icon: Icon(Icons.directions_transit)),
+                        Tab(icon: Icon(Icons.directions_bike)),
+                    ],
+                    ),
+                    title: Text('Tabs Demo'),
+                ),
+                body: TabBarView(
+                    children: <ListView>[
+                makeListView(500 , 0)
+                    
+                    ],
+                ),
             ),
-          );
-        },
-      );
-}
-
-
-TeamViewData({Key key});// : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.youtube_searched_for)),
-                Tab(icon: Icon(Icons.directions_transit)),
-                Tab(icon: Icon(Icons.directions_bike)),
-              ],
-            ),
-            title: Text('Tabs Demo'),
-          ),
-          body: TabBarView(
-            children: <ListView>[
-        makeList(500 , 0)
-            
-            ],
-          ),
         ),
-      ),
-    );
-  }
+        );
+    }
 }
   //   return Scaffold(
   //     appBar: AppBar(
