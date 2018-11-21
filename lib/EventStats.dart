@@ -18,17 +18,11 @@ class EventStats {
         }
         for(var key in myKeysList){
             myKeysVal.add(myccwms[key]);
-            
         }
 
         myKeysList.sort((b,a) => myccwms[a].compareTo(myccwms[b]));
         
         
-        return new EventStats(
-            ccwms: myKeysList,
-            // oprs: myoprs,
-            // dprs: mydprs
-
-        );
+        return new EventStats(ccwms: myKeysList);
     }
 }

@@ -8,12 +8,13 @@ void main() {
   runApp(MaterialApp(
     
     title: 'TBA',
+    home: new TBAData(),
     // Start the app with the "/" named route. In our case, the app will start
     // on the FirstScreen Widget
     initialRoute: '/',
-    routes: {
+    routes: <String, WidgetBuilder>{
       // When we navigate to the "/" route, build the FirstScreen Widget
-      '/': (context) => TBAData()
+      '/AllTeams': (BuildContext context) => new TBAData()
       // When we navigate to the "/second" route, build the SecondScreen Widget
       //'/second': (context) => TeamViewData()
     },

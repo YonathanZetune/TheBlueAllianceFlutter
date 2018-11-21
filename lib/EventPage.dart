@@ -17,6 +17,7 @@ class EventPage extends StatelessWidget{
         }
         return returnList;
     }
+
     @override
     Widget build(BuildContext context){
         return MaterialApp(
@@ -32,15 +33,15 @@ class EventPage extends StatelessWidget{
                     child: Icon(Icons.favorite_border),
                     
                     onPressed: (){
-
-                        print('pressed');
+ 
                     }
                 ),
                 backgroundColor: Colors.white.withAlpha(225),
                 appBar: AppBar(
-                    
-                     
-                     
+                        leading: 
+                        IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
+                            Navigator.of(context).pop();
+                            }),
                     bottom: TabBar(
                     tabs: [
                         Tab(text: 'Info'),
@@ -202,25 +203,7 @@ class EventPage extends StatelessWidget{
                                                         ]
                                                     ),
                                                     
-                                                
-                                                // trailing: Row(
-                                                // mainAxisAlignment: MainAxisAlignment.end,
-                                                // children:[
-                                                //     SizedBox(
-                                                //         width: 80,
-                                                //         child:
-                                                //     Column(
-                                                //    children: getTeamNameList(snapshot.data[index].alliances[1].teamkeys)
-                                                //         )
-                                                //     ),
-                                                // Text(snapshot.data[index].alliances[1].score.toString(),
-                                                //  style: 
-                                                // TextStyle(fontSize: 25, fontWeight: FontWeight.w900, color: Colors.blue)),
-                                                    
-                                                //         ]
-                                                //     ),
-                                                
-                                                //title: Text(snapshot.data[index].nickName),
+                                      
                                             )
                                                 
                                           ]
@@ -251,7 +234,9 @@ class EventPage extends StatelessWidget{
                                         child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[  
+                                                
                                                 ListTile(
+                                                    
                                                  title: Text(snapshot.data[index]),
                                                 
                                                             )

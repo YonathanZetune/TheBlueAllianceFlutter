@@ -16,14 +16,11 @@ class TeamViewData extends StatelessWidget {
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
-                    
-                    // bottom: SliverAppBar(
-                    //     flexibleSpace: Sear,
-                        
-                    // // tabs: [
-                    // //     //Tab(icon: Icon(Icons.view_list)),
-                    // // ],
-                    // ),
+                    leading: 
+                        IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
+                            Navigator.of(context).pop('/');
+                            }),
+                
                     title: Text('All Teams'),
                 ),
                 body: Container(

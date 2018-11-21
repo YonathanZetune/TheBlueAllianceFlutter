@@ -11,6 +11,7 @@ class TeamPage extends StatelessWidget{
     @override
     Widget build(BuildContext context){
         return MaterialApp(
+            
             theme: ThemeData(
             primaryColor: Colors.deepPurple[500]
             ),
@@ -19,6 +20,11 @@ class TeamPage extends StatelessWidget{
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                    leading: 
+                        IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
+                            Navigator.of(context).popAndPushNamed('/AllTeams');
+                            }),
+                       
                     bottom: TabBar(
                     tabs: [
                         Tab(icon: Icon(Icons.info_outline), text: 'Info'),
