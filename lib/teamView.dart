@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tba_application/teamPage.dart';
 import 'package:tba_application/Requests.dart';
+import 'package:tba_application/team.dart';
+import 'package:tba_application/main.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'dart:io';
 
 class TeamViewData extends StatelessWidget {
-
+    
     @override
     Widget build(BuildContext context) {
         return MaterialApp(
@@ -16,6 +23,10 @@ class TeamViewData extends StatelessWidget {
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                    actions: <Widget>[IconButton(icon: Icon(Icons.search), padding: EdgeInsets.all(18) ,
+                    iconSize: 28, onPressed: (){
+                            showSearch(context: context, delegate: DataSearch());
+                    })],
                     leading: 
                         IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
                             Navigator.of(context).pop('/');
@@ -74,4 +85,120 @@ class TeamViewData extends StatelessWidget {
         );
     }
 }
-          
+
+class DataSearch extends SearchDelegate<String>{
+    Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  return directory.path;
+}
+
+    Future<File> get _localFile async {
+  final path = await _localPath;
+  return File(path + '/' + 'myTeamsListFile.json');
+}
+   
+
+  
+    Future<List<Team>> readTeams(String query) async {
+        try {
+    final file = await _localFile;
+
+    // Read the file
+    List<Team> contents =  TeamList.fromJson(json.decode(file.readAsStringSync())).teamslist;
+    for (var team in contents){
+        print(team.key);
+    }
+    return contents;
+  } catch (e) {
+    // If we encounter an error, return 0
+   
+  }
+  return List<Team>();
+
+
+}
+
+static bool calledAlready = false;
+static List myListTeams;
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // When I have the search bar, what actions do i want to perform (actions for search bar)
+    return [
+        IconButton(icon: Icon(Icons.clear), onPressed: (){
+            query = '';
+
+        })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    //leading icon on app bar
+    return IconButton(icon: AnimatedIcon(icon: AnimatedIcons.menu_arrow, progress: transitionAnimation,),
+    onPressed: (){
+        close(context, null);
+    });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // show based on selection
+    return null;
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // show something when entering search bar
+    
+//    // print('LENGTH' + myListTeams.length.toString());
+    List<Team> suggestionList;
+    if(query.isNotEmpty){
+     //suggestionList = myListTeams.where((p)=> p.nickName.toLowerCase().contains(query.toLowerCase())).toList();
+    return 
+            FutureBuilder(
+                        future: readTeams(query),
+                        builder: (BuildContext context, AsyncSnapshot snapshot){
+                            if (snapshot.data == null){
+                                return Container(
+                                    child: Center(
+                                        child: CircularProgressIndicator()
+                                    ),
+
+                                );
+                            } else {
+                        return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index){
+                            return  ListTile(
+                                leading: Text(snapshot.data[index].key),
+                                trailing: Text(snapshot.data[index].teamNum),
+                                onTap: (){
+                                    Navigator.push(context,
+                                new MaterialPageRoute(builder: (context) =>
+                                TeamPage(snapshot.data[index])) 
+                                );
+                                } 
+
+                            );
+                        }
+                    );
+                 }
+                        }     
+    );
+}else{
+    return Container(
+        child: Center(
+            child: Text('Enter a team or number.'),
+        ),
+    );
+}
+
+}
+  
+
+            
+  
+ 
+}

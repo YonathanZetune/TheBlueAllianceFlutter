@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:tba_application/Requests.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
+import 'package:tba_application/EventsList.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 void main() {
   runApp(MaterialApp(
@@ -15,6 +18,7 @@ void main() {
     routes: <String, WidgetBuilder>{
       // When we navigate to the "/" route, build the FirstScreen Widget
       '/AllTeams': (BuildContext context) => new TBAData()
+      //'/AllEvents': (BuildContext context) => new Eventslist()
       // When we navigate to the "/second" route, build the SecondScreen Widget
       //'/second': (context) => TeamViewData()
     },
@@ -30,12 +34,55 @@ class TBAData extends StatefulWidget {
 
 class TBAState extends State<TBAData> {
   
-  HttpClient myhttp = new HttpClient();
-//List<Team> teamData;
+    HttpClient myhttp = new HttpClient();
+    final fullTeamsList = Requests.getTeamsJsonForRequest('/teams/0');
+    bool downloading = false;
+    var progressString = '';
+
+    File jsonFile;
+    Directory dir;
+    String fileName = 'myTeamsListFile.json';
+    bool fileExists = false;
+    Map<String, dynamic> fileContent;
+
+    void createFile(Map<String, dynamic> content, Directory dir, String fileName){
+        print('creating file');
+        File file = new File(dir.path + '/' + fileName);
+        file.createSync();
+        fileExists = true;
+        file.writeAsStringSync(json.encode(content));
+        
+        
+    }
+
+    void writeToFile(String key, dynamic value){
+print('writing');
+        Map<String, dynamic> content = {key: value};
+        if (fileExists){
+            print('exists');
+            Map<String, dynamic> jsonFileContents = 
+            json.decode(jsonFile.readAsStringSync());
+            jsonFileContents.addAll(content);
+            jsonFile.writeAsStringSync(json.encode(jsonFileContents));
+
+        }else{
+            print('not exist');
+            createFile(content, dir, fileName);
+        }
+    }
 
     // runs an HTTP get request and returns an HTTPClientResponse
     Future getSWData() async {
-        myhttp.get('www.thebluealliance.com', 80, '/api/v3/status')
+        for (var team in await Requests.getTeamsJsonForRequest('/teams/0')){
+            writeToFile(team.key, team.teamNum);
+
+        }
+       
+    }
+    Future<void> downloadFile() async {
+     
+     
+        await myhttp.get('www.thebluealliance.com', 80, '/api/v3/status')
         .then((HttpClientRequest request) {
             request.headers.set("accept", "application/json");
             request.headers.set("X-TBA-Auth-Key", "yQEov7UAGBKouLOxmatZFhTJUv7km660eKXAKgeJElVIp6iGtrsRrfk1JuvXxrMC");
@@ -47,7 +94,7 @@ class TBAState extends State<TBAData> {
         });
         myhttp.close();
     }
-  
+
     @override
     Widget build(BuildContext context) {
         return Scaffold(
@@ -61,7 +108,6 @@ class TBAState extends State<TBAData> {
             Column(
                 
                 children: <Widget>[
-                
                     SizedBox(
                        width: double.infinity, 
                         child:
@@ -80,7 +126,7 @@ class TBAState extends State<TBAData> {
             )
             
             ),
-             SizedBox(
+                    SizedBox(
                        width: double.infinity, 
                         child:
                     RaisedButton(
@@ -90,7 +136,7 @@ class TBAState extends State<TBAData> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>  TeamViewData(),
+                    builder: (context) =>  EventsList(),
                 )
             );
         },
@@ -98,7 +144,27 @@ class TBAState extends State<TBAData> {
             )
             
             )
-                        
+                    ,
+                    SizedBox(
+                        width: double.infinity, 
+                        child:
+                         downloading ?
+                    Container(
+                        height: 120,
+                        width: 200,
+                        child: Card(
+                            color: Colors.black,
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                    CircularProgressIndicator(),
+                                    SizedBox(height: 20),
+                                    Text('Downloading file : $progressString',style: TextStyle(color: Colors.white),)
+                                ],
+                            ),
+                        ),
+
+                    ) :Text('No Data'))   
                         ]
 
                         
@@ -113,10 +179,22 @@ class TBAState extends State<TBAData> {
     }
 
   
-    // @override
+    @override
     void initState() {
         super.initState();
-        this.getSWData();
+        getSWData();
+        getApplicationDocumentsDirectory().then((Directory directory){
+            dir = directory;
+            jsonFile = new File(dir.path + '/' + fileName);
+            fileExists = jsonFile.existsSync();
+            if (fileExists) {
+                this.setState(() => fileContent = 
+                json.decode(jsonFile.readAsStringSync()));
+            }
+        }
+        );
+        
+        downloadFile();
     }
 }
 
