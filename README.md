@@ -1,8 +1,8 @@
-# tba_application
+#About the App
 
-A new Flutter project.
+An application built on Google's Flutter framework. Using TheBlueAlliance's API, the app displays scores, events, and team information across many FIRST Robotics Competition events.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+#Major Dependencies
+- flutter
+- path_provider
+- http
