@@ -98,23 +98,36 @@ class DataSearch extends SearchDelegate<String>{
   return File(path + '/' + 'myTeamsListFile.json');
 }
    
+    Team getTeamObject(String teamkey) {
+        Team myTeam = new Team();
+        myTeam.key = teamkey;
+        return myTeam;
 
+    }
   
-    Future<List<Team>> readTeams(String query) async {
+    Future<dynamic> readTeams(String query) async {
         try {
     final file = await _localFile;
 
     // Read the file
-    List<Team> contents =  TeamList.fromJson(json.decode(file.readAsStringSync())).teamslist;
-    for (var team in contents){
-        print(team.key);
+  
+    List<Team> contents;
+    List<Team> myjson = TeamList.fromJson(json.decode(file.readAsStringSync())).teamslist;
+    if(int.tryParse(query)!=null){
+        contents= myjson.where((p)=> p.teamInt.toString().contains(int.tryParse(query).toString())).toList();
+
+    }else{
+    contents =  myjson.where((p)=> p.nickName.toLowerCase().contains(query.toLowerCase())).toList();
     }
+    //print('CONTS:' + contents.toString());
     return contents;
   } catch (e) {
+      //print('HERE');
+      print(e);
     // If we encounter an error, return 0
    
   }
-  return List<Team>();
+ // return List<Team>();
 
 
 }
@@ -145,7 +158,7 @@ static List myListTeams;
   @override
   Widget buildResults(BuildContext context) {
     // show based on selection
-    return null;
+    return buildSuggestions(context);
   }
 
   @override
@@ -172,8 +185,9 @@ static List myListTeams;
                         itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, int index){
                             return  ListTile(
-                                leading: Text(snapshot.data[index].key),
+                                leading: Text(snapshot.data[index].nickName),
                                 trailing: Text(snapshot.data[index].teamNum),
+                            
                                 onTap: (){
                                     Navigator.push(context,
                                 new MaterialPageRoute(builder: (context) =>

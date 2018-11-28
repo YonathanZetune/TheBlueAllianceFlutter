@@ -23,6 +23,10 @@ dependencies:
   path_provider: ^0.4.1
   http: ^0.12.0 
   url_launcher: ^4.0.1
+  dio: any
+  intl: ^0.15.7
+  date_format: ^1.0.5
+
   
   
 

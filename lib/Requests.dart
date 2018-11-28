@@ -19,15 +19,29 @@ class Requests {
         var path = '/api/v3$reqPath';
         var result = await getResult(path);
         var myTeamsList = TeamList.fromJson(result).teamslist;
-        //var dir = await getApplicationDocumentsDirectory();
-        //var dirPath = dir.path;
-        //var myFile = File('$dirPath/AllTeams.json');
+   
         //print(formatDate(new DateTime(myFile.lastModifiedSync().year,myFile.lastModifiedSync().month, 
         //myFile.lastModifiedSync().day, myFile.lastModifiedSync().minute), [DD, ',',dd, yyyy, '-', MM , '-', dd]));
-        //myFile.writeAsStringSync(myTeamsList.toString());
-        //print(myFile.readAsStringSync());
+      
    
         return myTeamsList;
+    }
+    static Future<List<Team>> getAllTeams() async {
+        int page = 0;
+        var path = '/api/v3/teams/$page';
+        var result =  TeamList.fromJson(await getResult(path)).teamslist;
+        List<Team> allTeams = new List<Team>();
+
+         while(result.isNotEmpty){
+             for(Team team in result){
+                allTeams.add(team);
+            }
+            print('NEXT');
+            page+=1;
+            path = '/api/v3/teams/$page';
+            result = TeamList.fromJson(await getResult(path)).teamslist;
+        }
+        return allTeams;
     }
 
     static Future<List<Event>> getTeamEvents(String teamkey, int year) async {
@@ -36,6 +50,7 @@ class Requests {
         var myTeamsEventsList = EventList.fromJson(result).eventslist;
         return myTeamsEventsList;
     }
+    
     static Future<TeamDetail> getTeamDetails(String teamkey) async {
         var path = '/api/v3/team/$teamkey';
         var result = await getResult(path);

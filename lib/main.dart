@@ -3,6 +3,8 @@ import 'package:tba_application/Requests.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
+import 'package:tba_application/team.dart';
+
 import 'package:tba_application/EventsList.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +37,6 @@ class TBAData extends StatefulWidget {
 class TBAState extends State<TBAData> {
   
     HttpClient myhttp = new HttpClient();
-    final fullTeamsList = Requests.getTeamsJsonForRequest('/teams/0');
     bool downloading = false;
     var progressString = '';
 
@@ -44,41 +45,64 @@ class TBAState extends State<TBAData> {
     String fileName = 'myTeamsListFile.json';
     bool fileExists = false;
     Map<String, dynamic> fileContent;
+    List<Map<String, dynamic>> jsonFileContents;
+List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
 
-    void createFile(Map<String, dynamic> content, Directory dir, String fileName){
+    void createFile(List<Map<String, dynamic>> content, Directory dir, String fileName){
         print('creating file');
         File file = new File(dir.path + '/' + fileName);
         file.createSync();
-        fileExists = true;
+        //fileExists = true;
         file.writeAsStringSync(json.encode(content));
         
         
     }
 
-    void writeToFile(String key, dynamic value){
-print('writing');
-        Map<String, dynamic> content = {key: value};
+    void writeToFile(List<Team> team){
+
+    print('writing');
+
+        content.clear();
+        //content.clear();
+        for(Team i in team) {
+            //print('HERE');
+    Map<String, dynamic> myTeam =    {
+    "key": i.key,
+    "team_number": i.teamInt,
+    "nickname": i.nickName,
+   
+  };
+  content.add(myTeam);
+  
+        }
+        jsonFile.delete();
         if (fileExists){
             print('exists');
-            Map<String, dynamic> jsonFileContents = 
-            json.decode(jsonFile.readAsStringSync());
-            jsonFileContents.addAll(content);
-            jsonFile.writeAsStringSync(json.encode(jsonFileContents));
+            if(jsonFileContents == null){
+               jsonFileContents = new List<Map<String, dynamic>>();
+               jsonFileContents.clear();
+            }
+            jsonFileContents = content;
+            jsonFile.writeAsStringSync(json.encode(jsonFileContents), mode: FileMode.writeOnlyAppend);
 
         }else{
             print('not exist');
             createFile(content, dir, fileName);
+        
+        
         }
+            
+
+        
+    
     }
 
     // runs an HTTP get request and returns an HTTPClientResponse
     Future getSWData() async {
-        for (var team in await Requests.getTeamsJsonForRequest('/teams/0')){
-            writeToFile(team.key, team.teamNum);
-
-        }
-       
+        
+        writeToFile(await Requests.getAllTeams());
     }
+
     Future<void> downloadFile() async {
      
      
@@ -164,7 +188,7 @@ print('writing');
                             ),
                         ),
 
-                    ) :Text('No Data'))   
+                    ) :Text(''))   
                         ]
 
                         
@@ -182,6 +206,7 @@ print('writing');
     @override
     void initState() {
         super.initState();
+        downloadFile();
         getSWData();
         getApplicationDocumentsDirectory().then((Directory directory){
             dir = directory;
@@ -194,7 +219,7 @@ print('writing');
         }
         );
         
-        downloadFile();
+        
     }
 }
 
