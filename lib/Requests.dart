@@ -36,7 +36,6 @@ class Requests {
              for(Team team in result){
                 allTeams.add(team);
             }
-            print('NEXT');
             page+=1;
             path = '/api/v3/teams/$page';
             result = TeamList.fromJson(await getResult(path)).teamslist;
@@ -91,6 +90,12 @@ class Requests {
         myEventsPerYear.sort((a,b) => a.name.compareTo(b.name));
         
         return myEventsPerYear;
+    }
+    static Future<Event> getEvent(String key) async {
+        var path = '/api/v3/event/$key';
+        var result = await getResult(path);
+        var myEvent =  Event.fromJson(result);
+        return myEvent;
     }
 
     static Future getResult(String path) async {

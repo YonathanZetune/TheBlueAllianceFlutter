@@ -29,7 +29,7 @@ class TeamViewData extends StatelessWidget {
                     })],
                     leading: 
                         IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
-                            Navigator.of(context).pop('/');
+                            Navigator.of(context).popUntil(ModalRoute.withName('/'));
                             }),
                 
                     title: Text('All Teams'),
@@ -164,13 +164,9 @@ static List myListTeams;
   @override
   Widget buildSuggestions(BuildContext context) {
     // show something when entering search bar
-    
-//    // print('LENGTH' + myListTeams.length.toString());
     List<Team> suggestionList;
     if(query.isNotEmpty){
-     //suggestionList = myListTeams.where((p)=> p.nickName.toLowerCase().contains(query.toLowerCase())).toList();
-    return 
-            FutureBuilder(
+    return  FutureBuilder(
                         future: readTeams(query),
                         builder: (BuildContext context, AsyncSnapshot snapshot){
                             if (snapshot.data == null){

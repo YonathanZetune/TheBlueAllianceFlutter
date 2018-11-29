@@ -2,10 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:tba_application/Event.dart';
 import 'package:tba_application/Requests.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
 class EventPage extends StatelessWidget{
     final Event myEvent;
-
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    _showSnackBar(String text){
+        print('Snacking');
+        final snackbar = new SnackBar(
+            duration: Duration(seconds: 1),
+            content: new Text(text),
+        );
+        _scaffoldKey.currentState.showSnackBar(snackbar);
+    }
     EventPage(this.myEvent);
+     _addFavorite() async {
+         
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  //List<String> keys = (prefs.getStringList('key') ?? ['']);
+  //print('Pressed $keys times.');
+  if(prefs.getStringList('key') != null && prefs.getStringList('key').contains(myEvent.key)){
+      List<String> myKeys = prefs.getStringList('key');
+      myKeys.remove(myEvent.key);
+      _showSnackBar('Removed from favorites');
+      await prefs.setStringList('key', (myKeys));
+  }else{ 
+      if(prefs.getStringList('key') != null){
+  List<String> myKeys = prefs.getStringList('key') + [myEvent.key];
+  await prefs.setStringList('key', (myKeys));
+      }else{
+          List<String> myKeys = [myEvent.key];
+  await prefs.setStringList('key', (myKeys));
+      }
+      _showSnackBar('Added to favorites');
+     }
+  print(prefs.getStringList('key'));
+}
     List<Widget> getTeamNameList(List<dynamic> myList){
         List<Widget> returnList = new List<Widget>();
         for (var team in myList){
@@ -17,6 +49,7 @@ class EventPage extends StatelessWidget{
         }
         return returnList;
     }
+    
 
     @override
     Widget build(BuildContext context){
@@ -27,15 +60,15 @@ class EventPage extends StatelessWidget{
             home: DefaultTabController(
             length: 4,
             child: Scaffold(
-                
-                floatingActionButton: FloatingActionButton(
-                    
-                    child: Icon(Icons.favorite_border),
-                    
+                key: _scaffoldKey,
+                 floatingActionButton: FloatingActionButton(
+                    child: const Icon(Icons.favorite),
+                    tooltip: 'Add to Favorites',
                     onPressed: (){
- 
+                    _addFavorite();
                     }
                 ),
+                
                 backgroundColor: Colors.white.withAlpha(225),
                 appBar: AppBar(
                         leading: 
@@ -58,6 +91,9 @@ class EventPage extends StatelessWidget{
                      child: new
                       TabBarView( 
                             children: [
+                            
+
+                
                                 FutureBuilder(
                                 future: Requests.getEventDetails(myEvent.key), 
                                 builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -236,8 +272,8 @@ class EventPage extends StatelessWidget{
                                             children: <Widget>[  
                                                 
                                                 ListTile(
-                                                    
-                                                 title: Text(snapshot.data[index]),
+                                                 leading: Text('Rank '+(index+1).toString()+':'),   
+                                                 title: (getTeamNameList(snapshot.data)[index]),
                                                 
                                                             )
                                                         ]
@@ -264,3 +300,4 @@ class EventPage extends StatelessWidget{
       
     }
 }
+

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
 import 'package:tba_application/team.dart';
+import 'package:tba_application/FavoriteList.dart';
 
 import 'package:tba_application/EventsList.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,7 +20,7 @@ void main() {
     initialRoute: '/',
     routes: <String, WidgetBuilder>{
       // When we navigate to the "/" route, build the FirstScreen Widget
-      '/AllTeams': (BuildContext context) => new TBAData()
+      '/AllTeams': (BuildContext context) => new TeamViewData()
       //'/AllEvents': (BuildContext context) => new Eventslist()
       // When we navigate to the "/second" route, build the SecondScreen Widget
       //'/second': (context) => TeamViewData()
@@ -167,8 +168,26 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
                 
             )
             
+            ),
+            SizedBox(
+                       width: double.infinity, 
+                        child:
+                    RaisedButton(
+                child: Text('Favorites', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
+                onPressed: () {
+            // Navigate to the second screen using a named route
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>  FavoriteList(),
+                )
+            );
+        },
+                
             )
-                    ,
+            
+            ),
+                    
                     SizedBox(
                         width: double.infinity, 
                         child:
