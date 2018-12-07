@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tba_application/Requests.dart';
+import 'package:tba_application/Event.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
 import 'package:tba_application/team.dart';
 import 'package:tba_application/FavoriteList.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tba_application/EventsList.dart';
 import 'package:path_provider/path_provider.dart';
 
 
 void main() {
   runApp(MaterialApp(
+    
     
     title: 'TBA',
     home: new TBAData(),
@@ -36,21 +38,28 @@ class TBAData extends StatefulWidget {
 }
 
 class TBAState extends State<TBAData> {
-  
+    
     HttpClient myhttp = new HttpClient();
     bool downloading = false;
     var progressString = '';
-
     File jsonFile;
+    File jsonEventFile;
     Directory dir;
+    Directory eventdir;
     String fileName = 'myTeamsListFile.json';
+    String eventfileName = 'myEventListFile.json';
     bool fileExists = false;
+    bool eventfileExists = false;
     Map<String, dynamic> fileContent;
+    Map<String, dynamic> fileEventContent;
     List<Map<String, dynamic>> jsonFileContents;
-List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
+    List<Map<String, dynamic>> jsonEventFileContents;
+    List<Map<String, dynamic>> eventcontent = new List<Map<String, dynamic>> ();
+    List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
 
     void createFile(List<Map<String, dynamic>> content, Directory dir, String fileName){
         print('creating file');
+        
         File file = new File(dir.path + '/' + fileName);
         file.createSync();
         //fileExists = true;
@@ -59,10 +68,8 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
         
     }
 
-    void writeToFile(List<Team> team){
-
+    void writeTeamsToFile(List<Team> team){
     print('writing');
-
         content.clear();
         //content.clear();
         for(Team i in team) {
@@ -74,7 +81,6 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
    
   };
   content.add(myTeam);
-  
         }
         jsonFile.delete();
         if (fileExists){
@@ -89,19 +95,44 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
         }else{
             print('not exist');
             createFile(content, dir, fileName);
-        
-        
         }
-            
+    }
+    void writeEventsToFile(List<Event> events){
+    print('writing');
+        eventcontent.clear();
+        //content.clear();
+        for(Event i in events) {
+            //print('HERE');
+    Map<String, dynamic> myEvent =    {
+    "key": i.key,
+    "city": i.city,
+    "start_date": i.date,
+    "name": i.name,
+    "state_prov": i.state
+   
+  };
+  eventcontent.add(myEvent);
+        }
+        //jsonEventFile.delete();
+        if (eventfileExists){
+            print('exists');
+            if(jsonEventFileContents == null){
+               jsonEventFileContents = new List<Map<String, dynamic>>();
+               jsonEventFileContents.clear();
+            }
+            jsonEventFileContents = eventcontent;
+            jsonEventFile.writeAsStringSync(json.encode(jsonFileContents), mode: FileMode.writeOnlyAppend);
 
-        
-    
+        }else{
+            print('not exist');
+            createFile(eventcontent, eventdir, eventfileName);
+        }
     }
 
     // runs an HTTP get request and returns an HTTPClientResponse
     Future getSWData() async {
-        
-        writeToFile(await Requests.getAllTeams());
+        //writeEventsToFile(await Requests.getEventsPerYear('2018'));
+        writeTeamsToFile(await Requests.getAllTeams());
     }
 
     Future<void> downloadFile() async {
@@ -123,12 +154,16 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
     @override
     Widget build(BuildContext context) {
         return Scaffold(
+            
             backgroundColor: Colors.white.withAlpha(225),
             appBar: AppBar(
+                actions: <Widget>[IconButton(icon: Icon(Icons.refresh), padding: EdgeInsets.all(18) ,
+                    iconSize: 28, onPressed: (){
+                            
+                    })],
                 backgroundColor: Colors.deepPurple[500],
-                title: Text('FRC OnDemand'),
+                title: Text('FRC Now'),
             ),
-            
             body: 
             Column(
                 
@@ -137,6 +172,8 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
                        width: double.infinity, 
                         child:
                     RaisedButton(
+                        
+                color: Colors.grey[400],
                 child: Text('All Teams', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
@@ -153,8 +190,10 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
             ),
                     SizedBox(
                        width: double.infinity, 
+    
                         child:
                     RaisedButton(
+                color: Colors.grey[400],
                 child: Text('All Events', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
@@ -170,9 +209,11 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
             
             ),
             SizedBox(
-                       width: double.infinity, 
+                       width: double.infinity,
+      
                         child:
                     RaisedButton(
+                color: Colors.grey[400],
                 child: Text('Favorites', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
@@ -225,6 +266,8 @@ List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
     @override
     void initState() {
         super.initState();
+        // Firestore.instance.collection('books').document()
+        // .setData({ 'title': 'title', 'author': 'author' });
         downloadFile();
         getSWData();
         getApplicationDocumentsDirectory().then((Directory directory){

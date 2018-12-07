@@ -91,9 +91,6 @@ class EventPage extends StatelessWidget{
                      child: new
                       TabBarView( 
                             children: [
-                            
-
-                
                                 FutureBuilder(
                                 future: Requests.getEventDetails(myEvent.key), 
                                 builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -144,7 +141,6 @@ class EventPage extends StatelessWidget{
                                     }
                                 }
                             ),
-                                
                                 FutureBuilder(
                                 future: Requests.getEventTeams(myEvent.key), 
                                 builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -253,6 +249,7 @@ class EventPage extends StatelessWidget{
                             }
                         }
                             ),
+                                
                                 FutureBuilder(
                             future: Requests.getEventOPRs(myEvent.key), 
                             builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -263,10 +260,14 @@ class EventPage extends StatelessWidget{
                                         ),
                                     );
                                 } else {
-                                    return ListView.builder(
+                                    return 
+                                    
+                                    ListView.builder(
                                                 itemCount: snapshot.data.length,
                                                 itemBuilder: (BuildContext context, int index){
-                                    return Card(
+                                   
+                                            
+                                     Card(
                                         child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[  
@@ -280,7 +281,7 @@ class EventPage extends StatelessWidget{
                                                     ),
                                     
                                             );
-                                                }
+                                        }
                                     ); 
                                     }}
                                     ),
@@ -299,5 +300,8 @@ class EventPage extends StatelessWidget{
                                 
       
     }
+}
+class RankPage extends StatefulBuilder{
+
 }
 

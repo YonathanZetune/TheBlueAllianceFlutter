@@ -19,11 +19,6 @@ class Requests {
         var path = '/api/v3$reqPath';
         var result = await getResult(path);
         var myTeamsList = TeamList.fromJson(result).teamslist;
-   
-        //print(formatDate(new DateTime(myFile.lastModifiedSync().year,myFile.lastModifiedSync().month, 
-        //myFile.lastModifiedSync().day, myFile.lastModifiedSync().minute), [DD, ',',dd, yyyy, '-', MM , '-', dd]));
-      
-   
         return myTeamsList;
     }
     static Future<List<Team>> getAllTeams() async {
@@ -88,7 +83,6 @@ class Requests {
         var result = await getResult(path);
         var myEventsPerYear =  EventList.fromJson(result).eventslist;
         myEventsPerYear.sort((a,b) => a.name.compareTo(b.name));
-        
         return myEventsPerYear;
     }
     static Future<Event> getEvent(String key) async {

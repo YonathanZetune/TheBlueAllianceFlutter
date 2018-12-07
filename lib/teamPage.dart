@@ -16,7 +16,7 @@ class TeamPage extends StatelessWidget{
             primaryColor: Colors.deepPurple[500]
             ),
             home: DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
@@ -40,7 +40,7 @@ class TeamPage extends StatelessWidget{
                      child: new
                       TabBarView( 
                             children: [
-                       FutureBuilder(
+                        FutureBuilder(
                         future: Requests.getTeamDetails(myTeam.key), 
                         builder: (BuildContext context, AsyncSnapshot snapshot){
                             if (snapshot.data == null){
@@ -94,7 +94,6 @@ class TeamPage extends StatelessWidget{
                             }
                         }
                        ),
-                        
                         FutureBuilder(
                         future: Requests.getTeamEvents(myTeam.key, 2018), 
                         builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -137,7 +136,9 @@ class TeamPage extends StatelessWidget{
                             );
                             }
                         }
-                            )
+                            ),
+                        
+                        Text('Coming Soon') 
                             ]
                       ),
 

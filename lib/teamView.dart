@@ -6,7 +6,6 @@ import 'package:tba_application/main.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:convert';
-
 import 'dart:io';
 
 class TeamViewData extends StatelessWidget {
