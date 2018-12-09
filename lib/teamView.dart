@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tba_application/teamPage.dart';
 import 'package:tba_application/Requests.dart';
 import 'package:tba_application/team.dart';
-import 'package:tba_application/main.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -163,7 +162,6 @@ static List myListTeams;
   @override
   Widget buildSuggestions(BuildContext context) {
     // show something when entering search bar
-    List<Team> suggestionList;
     if(query.isNotEmpty){
     return  FutureBuilder(
                         future: readTeams(query),

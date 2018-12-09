@@ -150,7 +150,7 @@ static List myListTeams;
   @override
   Widget buildSuggestions(BuildContext context) {
     // show something when entering search bar
-    List<Event> suggestionList;
+
     if(query.isNotEmpty){
     return  FutureBuilder(
                         future: readTeams(query),

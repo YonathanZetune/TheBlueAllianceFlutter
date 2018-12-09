@@ -82,7 +82,7 @@ class TBAState extends State<TBAData> {
   };
   content.add(myTeam);
         }
-        jsonFile.delete();
+        jsonFile.deleteSync();
         if (fileExists){
             print('exists');
             if(jsonFileContents == null){
@@ -266,8 +266,8 @@ class TBAState extends State<TBAData> {
     @override
     void initState() {
         super.initState();
-        // Firestore.instance.collection('books').document()
-        // .setData({ 'title': 'title', 'author': 'author' });
+        Firestore.instance.collection('FirstTry').document()
+        .setData({ 'title': 'TBLUEA', 'author': 'Yonathan' });
         downloadFile();
         getSWData();
         getApplicationDocumentsDirectory().then((Directory directory){
