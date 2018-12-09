@@ -5,4 +5,5 @@ An application built on Google's Flutter framework. Using TheBlueAlliance's API,
 #Major Dependencies
 - flutter
 - path_provider
+- firebase
 - http
