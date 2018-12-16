@@ -8,11 +8,13 @@ class FavoriteList extends StatelessWidget {
     Future<List<Event>> getFavorites() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<Event> myEvents = new List<Event>();
-
-  for (var key in prefs.getStringList('key') ?? ['']){
+  if (prefs.getStringList('key') != null){
+  for (var key in prefs.getStringList('key')){
       myEvents.add(await Requests.getEvent(key));
   }
     return myEvents;
+  }else{return null;}
+
 }
         @override
         Widget build(BuildContext context) {
@@ -38,10 +40,10 @@ class FavoriteList extends StatelessWidget {
                                      FutureBuilder(
                                 future: getFavorites(),
                                 builder: (BuildContext context, AsyncSnapshot snapshot){
-                                    if (snapshot.data == null){
+                                    if (snapshot.data == null || snapshot.data.length == 0){
                                         return Container(
                                             child: Center(
-                                                child: CircularProgressIndicator()
+                                                child: Text('No Favorites')
                                             ),
                                         );
                                     } else {

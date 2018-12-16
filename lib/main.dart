@@ -13,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
     
     
     title: 'TBA',
@@ -57,10 +58,10 @@ class TBAState extends State<TBAData> {
     List<Map<String, dynamic>> eventcontent = new List<Map<String, dynamic>> ();
     List<Map<String, dynamic>> content = new List<Map<String, dynamic>> ();
 
-    void createFile(List<Map<String, dynamic>> content, Directory dir, String fileName){
+    void createFile(List<Map<String, dynamic>> content, Directory dir, String thisfileName){
         print('creating file');
         
-        File file = new File(dir.path + '/' + fileName);
+        File file = new File(dir.path + '/' + thisfileName);
         file.createSync();
         //fileExists = true;
         file.writeAsStringSync(json.encode(content));
@@ -82,7 +83,12 @@ class TBAState extends State<TBAData> {
   };
   content.add(myTeam);
         }
-        jsonFile.deleteSync();
+        try{
+            jsonFile.delete();
+        } catch(e){
+            print(e.toString());
+        }
+        
         if (fileExists){
             print('exists');
             if(jsonFileContents == null){
@@ -98,10 +104,11 @@ class TBAState extends State<TBAData> {
         }
     }
     void writeEventsToFile(List<Event> events){
-    print('writing');
+    print('writingE');
         eventcontent.clear();
         //content.clear();
         for(Event i in events) {
+
             //print('HERE');
     Map<String, dynamic> myEvent =    {
     "key": i.key,
@@ -111,17 +118,24 @@ class TBAState extends State<TBAData> {
     "state_prov": i.state
    
   };
+
   eventcontent.add(myEvent);
         }
-        //jsonEventFile.delete();
-        if (eventfileExists){
+        try{
+            jsonEventFile.delete();
+        } catch(e){
+            print(e.toString());
+        }
+        
+        if(eventfileExists){
+            
             print('exists');
             if(jsonEventFileContents == null){
                jsonEventFileContents = new List<Map<String, dynamic>>();
                jsonEventFileContents.clear();
             }
             jsonEventFileContents = eventcontent;
-            jsonEventFile.writeAsStringSync(json.encode(jsonFileContents), mode: FileMode.writeOnlyAppend);
+            jsonEventFile.writeAsStringSync(json.encode(jsonEventFileContents), mode: FileMode.writeOnlyAppend);
 
         }else{
             print('not exist');
@@ -131,13 +145,14 @@ class TBAState extends State<TBAData> {
 
     // runs an HTTP get request and returns an HTTPClientResponse
     Future getSWData() async {
-        //writeEventsToFile(await Requests.getEventsPerYear('2018'));
+       writeEventsToFile(await Requests.getEventsPerYear('2018'));
         writeTeamsToFile(await Requests.getAllTeams());
     }
 
     Future<void> downloadFile() async {
-     
-     
+        // Stream<DocumentSnapshot> data = Firestore.instance.collection('Data').document('CurrentYear').snapshots();
+        // var year = 
+        //print('DATA:' +  data.toString());
         await myhttp.get('www.thebluealliance.com', 80, '/api/v3/status')
         .then((HttpClientRequest request) {
             request.headers.set("accept", "application/json");
@@ -266,17 +281,22 @@ class TBAState extends State<TBAData> {
     @override
     void initState() {
         super.initState();
-        Firestore.instance.collection('FirstTry').document()
-        .setData({ 'title': 'TBLUEA', 'author': 'Yonathan' });
         downloadFile();
         getSWData();
         getApplicationDocumentsDirectory().then((Directory directory){
             dir = directory;
+            eventdir = directory;
             jsonFile = new File(dir.path + '/' + fileName);
+            jsonEventFile = new File(dir.path + '/' + eventfileName);
+            eventfileExists = jsonEventFile.existsSync();
             fileExists = jsonFile.existsSync();
             if (fileExists) {
-                this.setState(() => fileContent = 
-                json.decode(jsonFile.readAsStringSync()));
+               fileContent = 
+                json.decode(jsonFile.readAsStringSync());
+            }
+            if (eventfileExists) {
+                eventcontent = 
+                json.decode(jsonEventFile.readAsStringSync());
             }
         }
         );

@@ -69,7 +69,9 @@ class Requests {
         var path = '/api/v3/event/$eventkey/oprs';
         var result = await getResult(path);
         var myEventStats = EventStats.fromJson(result).ccwms;
-        //myEventMatches.sort((b,a) => a.time.compareTo(b.time));
+        print('EVENT' + myEventStats.toString());
+        print(myEventStats.length);
+
         return myEventStats;
     }
     static Future<List<Event>> getEventsPerYear(String year) async {

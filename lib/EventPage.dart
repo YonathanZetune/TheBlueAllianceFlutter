@@ -88,7 +88,7 @@ class EventPage extends StatelessWidget{
                 ),
                 body: 
                  Container(
-                     child: new
+                     child: 
                       TabBarView( 
                             children: [
                                 FutureBuilder(
@@ -174,6 +174,7 @@ class EventPage extends StatelessWidget{
                                     }
                                 }
                             ),
+                                
                                 FutureBuilder(
                             future: Requests.getEventMatches(myEvent.key), 
                             builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -249,7 +250,6 @@ class EventPage extends StatelessWidget{
                             }
                         }
                             ),
-                                
                                 FutureBuilder(
                             future: Requests.getEventOPRs(myEvent.key), 
                             builder: (BuildContext context, AsyncSnapshot snapshot){
@@ -260,21 +260,18 @@ class EventPage extends StatelessWidget{
                                         ),
                                     );
                                 } else {
-                                    return 
-                                    
+                                    return  
                                     ListView.builder(
-                                                itemCount: snapshot.data.length,
-                                                itemBuilder: (BuildContext context, int index){
-                                   
-                                            
-                                     Card(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder: (BuildContext context, int index){
+                                     return Card(
                                         child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: <Widget>[  
                                                 
                                                 ListTile(
                                                  leading: Text('Rank '+(index+1).toString()+':'),   
-                                                 title: (getTeamNameList(snapshot.data)[index]),
+                                                 title: getTeamNameList(snapshot.data)[index],
                                                 
                                                             )
                                                         ]
@@ -283,7 +280,8 @@ class EventPage extends StatelessWidget{
                                             );
                                         }
                                     ); 
-                                    }}
+                                    }
+                                    }
                                     ),
                                     ]
                                         )
@@ -301,7 +299,5 @@ class EventPage extends StatelessWidget{
       
     }
 }
-class RankPage extends StatefulBuilder{
 
-}
 

@@ -26,6 +26,6 @@ class EventStats {
         myKeysList.sort((b,a) => myccwms[a].compareTo(myccwms[b]));
         
         
-        return new EventStats(ccwms: myKeysList);
+        return EventStats(ccwms: myKeysList);
     }
 }
