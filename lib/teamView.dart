@@ -11,23 +11,18 @@ class TeamViewData extends StatelessWidget {
     
     @override
     Widget build(BuildContext context) {
-        return MaterialApp(
-            theme: ThemeData(
-            primaryColor: Colors.deepPurple[500]
-            ),
-            home: DefaultTabController(
-            
-            length: 3,
-            child: Scaffold(
+        return  Scaffold(
+                
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                    backgroundColor: Colors.deepPurple[500],
                     actions: <Widget>[IconButton(icon: Icon(Icons.search), padding: EdgeInsets.all(18) ,
                     iconSize: 28, onPressed: (){
                             showSearch(context: context, delegate: DataSearch());
                     })],
                     leading: 
                         IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
-                            Navigator.of(context).popUntil(ModalRoute.withName('/'));
+                            Navigator.pop(context);
                             }),
                 
                     title: Text('All Teams'),
@@ -78,9 +73,9 @@ class TeamViewData extends StatelessWidget {
                     ),
 
                 ),
-            ),
-        ),
-        );
+            );
+        
+        
     }
 }
 

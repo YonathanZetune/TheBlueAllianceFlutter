@@ -10,16 +10,12 @@ class TeamPage extends StatelessWidget{
 
     @override
     Widget build(BuildContext context){
-        return MaterialApp(
-            
-            theme: ThemeData(
-            primaryColor: Colors.deepPurple[500]
-            ),
-            home: DefaultTabController(
+        return  DefaultTabController(
             length: 3,
             child: Scaffold(
                 backgroundColor: Colors.white,
                 appBar: AppBar(
+                    backgroundColor: Colors.deepPurple[500],
                     leading: 
                         IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
                             Navigator.of(context).popAndPushNamed('/AllTeams');
@@ -144,8 +140,8 @@ class TeamPage extends StatelessWidget{
 
                             ),
                  ),
-            ),
             );
+            
       
     }
 }

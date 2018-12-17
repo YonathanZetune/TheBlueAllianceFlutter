@@ -9,23 +9,25 @@ import 'dart:io';
 class EventsList extends StatelessWidget {
         @override
         Widget build(BuildContext context) {
-                return MaterialApp(
-                    theme: ThemeData(
-                    primaryColor: Colors.deepPurple[500]
-                    ),
-                    home: DefaultTabController(
+                // return MaterialApp(
+                //     theme: ThemeData(
+                //     primaryColor: Colors.deepPurple[500]
+                //     ),
+                //     home: DefaultTabController(
                     
-                    length: 3,
-                    child: Scaffold(
+                //     length: 3,
+                //     child: 
+                    return Scaffold(
                         backgroundColor: Colors.grey[300],
                         appBar: AppBar(
+                            backgroundColor: Colors.deepPurple[500],
                             actions: <Widget>[IconButton(icon: Icon(Icons.search), padding: EdgeInsets.all(18) ,
                     iconSize: 28, onPressed: (){
                             showSearch(context: context, delegate: DataSearch());
                     })],
                             leading: 
                                 IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
-                                    Navigator.of(context).pop('/');
+                                    Navigator.pop(context);
                                     }),
                         
                             title: Text('All Events'),
@@ -70,8 +72,8 @@ class EventsList extends StatelessWidget {
                             }
                         ),
                     ),
-                ),
-            ),
+                
+            
         );
     }
 }

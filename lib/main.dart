@@ -1,34 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:tba_application/Requests.dart';
 import 'package:tba_application/Event.dart';
+import 'package:tba_application/EventsList.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
 import 'package:tba_application/team.dart';
+import 'package:tba_application/teamPage.dart';
 import 'package:tba_application/FavoriteList.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tba_application/EventsList.dart';
 import 'package:path_provider/path_provider.dart';
 
 
 void main() {
-  runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
     
+  runApp( MaterialApp(
+      
     
+    //key: Key('one'),
     title: 'TBA',
-    home: new TBAData(),
+    home: TBAData(),
     // Start the app with the "/" named route. In our case, the app will start
     // on the FirstScreen Widget
     initialRoute: '/',
-    routes: <String, WidgetBuilder>{
+    routes: {
       // When we navigate to the "/" route, build the FirstScreen Widget
-      '/AllTeams': (BuildContext context) => new TeamViewData()
+      
+      '/AllTeams': (context) => TeamViewData(),
+      '/AllTeams/Team': (context) => new TeamPage(new Team()),
+      '/AllEvents': (context) => EventsList(),
+      
+      '/Favs': (context) => FavoriteList()
       //'/AllEvents': (BuildContext context) => new Eventslist()
       // When we navigate to the "/second" route, build the SecondScreen Widget
       //'/second': (context) => TeamViewData()
     },
+    debugShowCheckedModeBanner: false,
   )
+  
   );
 }
 
@@ -68,7 +77,6 @@ class TBAState extends State<TBAData> {
         
         
     }
-
     void writeTeamsToFile(List<Team> team){
     print('writing');
         content.clear();
@@ -169,7 +177,6 @@ class TBAState extends State<TBAData> {
     @override
     Widget build(BuildContext context) {
         return Scaffold(
-            
             backgroundColor: Colors.white.withAlpha(225),
             appBar: AppBar(
                 actions: <Widget>[IconButton(icon: Icon(Icons.refresh), padding: EdgeInsets.all(18) ,
@@ -192,12 +199,9 @@ class TBAState extends State<TBAData> {
                 child: Text('All Teams', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  TeamViewData(),
-                )
-            );
+           Navigator.pushNamed(context, '/AllTeams');
+                
+            
         },
                 
             )
@@ -212,18 +216,13 @@ class TBAState extends State<TBAData> {
                 child: Text('All Events', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  EventsList(),
-                )
-            );
+            Navigator.pushNamed(context, '/AllEvents');
         },
                 
             )
             
             ),
-            SizedBox(
+                    SizedBox(
                        width: double.infinity,
       
                         child:
@@ -232,12 +231,7 @@ class TBAState extends State<TBAData> {
                 child: Text('Favorites', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
             // Navigate to the second screen using a named route
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>  FavoriteList(),
-                )
-            );
+            Navigator.pushNamed(context,'/Favs');
         },
                 
             )

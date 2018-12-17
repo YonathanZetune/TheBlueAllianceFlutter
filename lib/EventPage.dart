@@ -53,11 +53,7 @@ class EventPage extends StatelessWidget{
 
     @override
     Widget build(BuildContext context){
-        return MaterialApp(
-            theme: ThemeData(
-            primaryColor: Colors.deepPurple[500]
-            ),
-            home: DefaultTabController(
+        return DefaultTabController(
             length: 4,
             child: Scaffold(
                 key: _scaffoldKey,
@@ -71,6 +67,7 @@ class EventPage extends StatelessWidget{
                 
                 backgroundColor: Colors.white.withAlpha(225),
                 appBar: AppBar(
+                    backgroundColor: Colors.deepPurple[500],
                         leading: 
                         IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
                             Navigator.of(context).pop();
@@ -291,8 +288,8 @@ class EventPage extends StatelessWidget{
             
                       ),
 
-            )
-        );
+            );
+        
                  
                        
                                 

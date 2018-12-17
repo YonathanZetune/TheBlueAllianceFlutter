@@ -18,19 +18,13 @@ class FavoriteList extends StatelessWidget {
 }
         @override
         Widget build(BuildContext context) {
-                return MaterialApp(
-                    theme: ThemeData(
-                    primaryColor: Colors.deepPurple[500]
-                    ),
-                    home: DefaultTabController(
-                    
-                    length: 1,
-                    child: Scaffold(
+                return Scaffold(
                         backgroundColor: Colors.white,
                         appBar: AppBar(
+                            backgroundColor: Colors.deepPurple[500],
                             leading: 
                                 IconButton(icon: Icon(Icons.arrow_back ), onPressed: (){
-                                    Navigator.of(context).pop('/');
+                                    Navigator.pop(context);
                                     }),
                         
                             title: Text('Favorites'),
@@ -79,8 +73,8 @@ class FavoriteList extends StatelessWidget {
                             
                         
                     ),
-                ),
-            ),
+                //),
+            //),
         );
     }
 }
