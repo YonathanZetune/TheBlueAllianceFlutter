@@ -25,7 +25,7 @@ void main() {
     initialRoute: '/',
     routes: {
       // When we navigate to the "/" route, build the FirstScreen Widget
-      
+   
       '/AllTeams': (context) => TeamViewData(),
       '/AllTeams/Team': (context) => new TeamPage(new Team()),
       '/AllEvents': (context) => EventsList(),
