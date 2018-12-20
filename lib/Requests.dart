@@ -5,10 +5,9 @@ import 'package:tba_application/team.dart';
 import 'package:tba_application/Event.dart';
 import 'package:tba_application/EventStats.dart';
 import 'package:tba_application/Match.dart';
+import 'Constants.dart';
 
 class Requests {
-    static const String KEY = "yQEov7UAGBKouLOxmatZFhTJUv7km660eKXAKgeJElVIp6iGtrsRrfk1JuvXxrMC";
-
     static Future<List<Team>> getTeamsJsonForRequest(String reqPath) async {
         var path = '/api/v3$reqPath';
         var result = await getResult(path);
@@ -92,7 +91,7 @@ class Requests {
         var client = new HttpClient();
         var request = (await client.get('www.thebluealliance.com', 80, path));
         request.headers.set("accept", "application/json");
-        request.headers.set("X-TBA-Auth-Key", KEY);  
+        request.headers.set("X-TBA-Auth-Key", Constants.apiKey);  
         var response = await request.close();
         var result =  await response.transform(utf8.decoder).transform(json.decoder).single;
         //print('myres: $result');

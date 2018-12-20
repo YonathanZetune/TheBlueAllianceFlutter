@@ -8,8 +8,8 @@ import 'package:tba_application/teamView.dart';
 import 'package:tba_application/team.dart';
 import 'package:tba_application/teamPage.dart';
 import 'package:tba_application/FavoriteList.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:path_provider/path_provider.dart';
+import 'Constants.dart';
 
 
 void main() {
@@ -164,7 +164,7 @@ class TBAState extends State<TBAData> {
         await myhttp.get('www.thebluealliance.com', 80, '/api/v3/status')
         .then((HttpClientRequest request) {
             request.headers.set("accept", "application/json");
-            request.headers.set("X-TBA-Auth-Key", "yQEov7UAGBKouLOxmatZFhTJUv7km660eKXAKgeJElVIp6iGtrsRrfk1JuvXxrMC");
+            request.headers.set("X-TBA-Auth-Key", Constants.apiKey);
             return request.close();
         }).then((HttpClientResponse response) {
             response.transform(utf8.decoder).listen((contents) {
@@ -230,7 +230,7 @@ class TBAState extends State<TBAData> {
                 color: Colors.grey[400],
                 child: Text('Favorites', style: TextStyle(fontWeight: FontWeight.w600,fontSize: 15),),
                 onPressed: () {
-            // Navigate to the second screen using a named route
+            // Navigate to the second screen using a named rout
             Navigator.pushNamed(context,'/Favs');
         },
                 

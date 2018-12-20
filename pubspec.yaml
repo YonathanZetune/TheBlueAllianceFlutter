@@ -29,6 +29,7 @@ dependencies:
   date_format: ^1.0.5
   shared_preferences: ^0.4.3
   cloud_firestore: ^0.8.2+3
+  node_interop: ^1.0.0
 
   
   
