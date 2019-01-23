@@ -8,4 +8,4 @@ An application built on Google's Flutter framework. Using TheBlueAlliance's API,
 - firebase
 - http
 
-https://imgflip.com/gif/2rsz3x
+![Alt Text](https://imgflip.com/gif/2rsz3x)
