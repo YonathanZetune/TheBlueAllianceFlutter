@@ -3,9 +3,11 @@ import 'package:tba_application/EventPage.dart';
 import 'package:tba_application/Event.dart';
 import 'package:tba_application/Requests.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:core';
 
 class FavoriteList extends StatelessWidget {
-    Future<List<Event>> getFavorites() async {
+    
+Future<List<Event>> getFavorites() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<Event> myEvents = new List<Event>();
   if (prefs.getStringList('key') != null){

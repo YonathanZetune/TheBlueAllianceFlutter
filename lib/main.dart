@@ -3,6 +3,7 @@ import 'package:tba_application/Requests.dart';
 import 'package:tba_application/Event.dart';
 import 'package:tba_application/EventsList.dart';
 import 'dart:convert';
+import 'dart:core';
 import 'dart:io';
 import 'package:tba_application/teamView.dart';
 import 'package:tba_application/team.dart';
@@ -153,14 +154,12 @@ class TBAState extends State<TBAData> {
 
     // runs an HTTP get request and returns an HTTPClientResponse
     Future getSWData() async {
-       writeEventsToFile(await Requests.getEventsPerYear('2018'));
+       writeEventsToFile(await Requests.getEventsPerYear('2019'));
         writeTeamsToFile(await Requests.getAllTeams());
     }
 
     Future<void> downloadFile() async {
-        // Stream<DocumentSnapshot> data = Firestore.instance.collection('Data').document('CurrentYear').snapshots();
-        // var year = 
-        //print('DATA:' +  data.toString());
+      
         await myhttp.get('www.thebluealliance.com', 80, '/api/v3/status')
         .then((HttpClientRequest request) {
             request.headers.set("accept", "application/json");

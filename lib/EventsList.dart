@@ -34,7 +34,7 @@ class EventsList extends StatelessWidget {
                         ),
                         body: Container(
                             child: FutureBuilder(
-                                future: Requests.getEventsPerYear('2018'),
+                                future: Requests.getEventsPerYear('2019'),
                                 builder: (BuildContext context, AsyncSnapshot snapshot){
                                     if (snapshot.data == null){
                                         return Container(
